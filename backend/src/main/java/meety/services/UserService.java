@@ -18,17 +18,17 @@ public class UserService {
      * Registers a new user by encoding their password and assigning the default role.
      *
      * @param user The User entity with plaintext password and username set.
-     *
-     * 1. The plaintext password from the User object is hashed using the injected PasswordEncoder.
-     *    This ensures that the password is securely stored in the database (never plaintext).
-     *    The hashing algorithm used depends on the PasswordEncoder bean configuration (commonly BCrypt).
-     * 2. The user's role is set to the default Role.User.
-     * 3. The user entity with hashed password and role is then saved to the database via UserRepository.
-     *
-     * Important:
-     * - The PasswordEncoder bean must be consistent with the encoder used during authentication to correctly verify passwords later on.
+     *             <p>
+     *             1. The plaintext password from the User object is hashed using the injected PasswordEncoder.
+     *             This ensures that the password is securely stored in the database (never plaintext).
+     *             The hashing algorithm used depends on the PasswordEncoder bean configuration (commonly BCrypt).
+     *             2. The user's role is set to the default Role.User.
+     *             3. The user entity with hashed password and role is then saved to the database via UserRepository.
+     *             <p>
+     *             Important:
+     *             - The PasswordEncoder bean must be consistent with the encoder used during authentication to correctly verify passwords later on.
      */
-    public void registerUser(User user){
+    public void registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -38,10 +38,10 @@ public class UserService {
      *
      * @param username The username to search for.
      * @return The User entity if found, or null if no user exists with this username.
-     *
+     * <p>
      * Used internally to fetch full user details for login or other user-related operations.
      */
-    public User findByUsername(String username){
+    public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElse(null);
     }
 }

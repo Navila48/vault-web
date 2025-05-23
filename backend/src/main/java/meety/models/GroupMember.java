@@ -1,7 +1,10 @@
 package meety.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import meety.models.enums.Role;
 
 @Entity
@@ -17,6 +20,7 @@ public class GroupMember {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
+    @JsonBackReference
     private Group group;
 
     @ManyToOne

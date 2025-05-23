@@ -1,9 +1,12 @@
 package meety.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import meety.dtos.UserDto;
-import meety.models.enums.Role;
+
 import java.util.List;
 
 @Entity
@@ -18,15 +21,14 @@ public class User {
 
     private String username;
     private String password;
-    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<GroupMember> groupMemberships;
 
     public User(UserDto userDto) {
         username = userDto.getUsername();
         password = userDto.getPassword();
-        role = Role.USER;
         groupMemberships = List.of();
     }
 }

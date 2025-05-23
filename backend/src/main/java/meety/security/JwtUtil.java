@@ -1,4 +1,4 @@
-package meety.config;
+package meety.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -52,7 +52,6 @@ public class JwtUtil {
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getUsername())                             // set "sub" claim
-                .claim("role", user.getRole().toString())                // add custom "role" claim
                 .setIssuedAt(new Date())                                    // current time as issue date
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))  // expiry time
                 .signWith(SECRET_KEY)                                       // sign token with secret key

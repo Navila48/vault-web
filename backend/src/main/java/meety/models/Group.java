@@ -1,7 +1,10 @@
 package meety.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import meety.dtos.GroupDto;
 
 import java.util.Date;
@@ -22,6 +25,7 @@ public class Group {
     private String description;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<GroupMember> members;
 
     @ManyToOne

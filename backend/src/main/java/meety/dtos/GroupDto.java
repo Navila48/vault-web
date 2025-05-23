@@ -1,6 +1,8 @@
 package meety.dtos;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -8,4 +10,5 @@ import lombok.*;
 public class GroupDto {
     private String name;
     private String description;
+    private Boolean isPublic;
 }
