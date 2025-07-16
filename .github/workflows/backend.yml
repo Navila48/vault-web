@@ -3,11 +3,11 @@ name: Backend CI
 on:
   push:
     paths:
-      - 'backend/**'
-      - '.github/workflows/backend.yml'
+      - "backend/**"
+      - ".github/workflows/backend.yml"
   pull_request:
     paths:
-      - 'backend/**'
+      - "backend/**"
 
 jobs:
   build:
@@ -19,9 +19,9 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'maven'
+          distribution: "temurin"
+          java-version: "21"
+          cache: "maven"
 
       - name: Build with Maven
         working-directory: ./backend

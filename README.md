@@ -26,7 +26,7 @@ The project uses Docker to quickly spin up a PostgreSQL database and pgAdmin ins
 
 ```bash
 git clone https://github.com/DenizAltunkapan/meety.git
-````
+```
 
 ---
 
@@ -60,8 +60,8 @@ docker compose up -d
 
 This will start the following services:
 
-* **PostgreSQL** at `localhost:<DB_PORT>` (e.g. `5432`)
-* **pgAdmin** at [http://localhost:8081](http://localhost:8081)
+- **PostgreSQL** at `localhost:<DB_PORT>` (e.g. `5432`)
+- **pgAdmin** at [http://localhost:8081](http://localhost:8081)
 
 > You can access pgAdmin using the credentials you provided in the `.env` file.
 
@@ -72,6 +72,7 @@ This will start the following services:
 The backend runs on port `8080` and connects to the database with the same values defined in `.env`.
 
 These are the values set in the [application properties](backend/src/main/resources/application.properties):
+
 > ⚠️ Make sure the values for database URL, username, password, and port match exactly with those in your `.env` file.
 > Otherwise, the backend will not be able to connect to the database started by Docker.
 
@@ -84,8 +85,8 @@ cd backend
 
 Then visit:
 
-* App API: [http://localhost:8080](http://localhost:8080)
-* Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- App API: [http://localhost:8080](http://localhost:8080)
+- Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ---
 
