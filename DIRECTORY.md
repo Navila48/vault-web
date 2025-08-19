@@ -5,83 +5,83 @@
 - 📁 **src**
   - 📁 **main**
     - 📁 **java**
-      - 📁 **meety**
-        - 📄 [BackendApplication.java](backend/src/main/java/meety/BackendApplication.java)
+      - 📁 **vaultWeb**
+        - 📄 [BackendApplication.java](backend/src/main/java/vaultWeb/BackendApplication.java)
         - 📁 **config**
-          - 📄 [CorsConfig.java](backend/src/main/java/meety/config/CorsConfig.java)
-          - 📄 [EncryptionConfig.java](backend/src/main/java/meety/config/EncryptionConfig.java)
-          - 📄 [OpenApiConfig.java](backend/src/main/java/meety/config/OpenApiConfig.java)
+          - 📄 [CorsConfig.java](backend/src/main/java/vaultWeb/config/CorsConfig.java)
+          - 📄 [EncryptionConfig.java](backend/src/main/java/vaultWeb/config/EncryptionConfig.java)
+          - 📄 [OpenApiConfig.java](backend/src/main/java/vaultWeb/config/OpenApiConfig.java)
           - 📁 **websocket**
-            - 📄 [JwtHandshakeInterceptor.java](backend/src/main/java/meety/config/websocket/JwtHandshakeInterceptor.java)
-            - 📄 [WebSocketConfig.java](backend/src/main/java/meety/config/websocket/WebSocketConfig.java)
+            - 📄 [JwtHandshakeInterceptor.java](backend/src/main/java/vaultWeb/config/websocket/JwtHandshakeInterceptor.java)
+            - 📄 [WebSocketConfig.java](backend/src/main/java/vaultWeb/config/websocket/WebSocketConfig.java)
         - 📁 **controllers**
-          - 📄 [ChatController.java](backend/src/main/java/meety/controllers/ChatController.java)
-          - 📄 [GroupController.java](backend/src/main/java/meety/controllers/GroupController.java)
-          - 📄 [PollController.java](backend/src/main/java/meety/controllers/PollController.java)
-          - 📄 [PrivateChatController.java](backend/src/main/java/meety/controllers/PrivateChatController.java)
-          - 📄 [UserController.java](backend/src/main/java/meety/controllers/UserController.java)
+          - 📄 [ChatController.java](backend/src/main/java/vaultWeb/controllers/ChatController.java)
+          - 📄 [GroupController.java](backend/src/main/java/vaultWeb/controllers/GroupController.java)
+          - 📄 [PollController.java](backend/src/main/java/vaultWeb/controllers/PollController.java)
+          - 📄 [PrivateChatController.java](backend/src/main/java/vaultWeb/controllers/PrivateChatController.java)
+          - 📄 [UserController.java](backend/src/main/java/vaultWeb/controllers/UserController.java)
         - 📁 **dtos**
-          - 📄 [ChatMessageDto.java](backend/src/main/java/meety/dtos/ChatMessageDto.java)
-          - 📄 [GroupDto.java](backend/src/main/java/meety/dtos/GroupDto.java)
-          - 📄 [PollRequestDto.java](backend/src/main/java/meety/dtos/PollRequestDto.java)
-          - 📄 [PollResponseDto.java](backend/src/main/java/meety/dtos/PollResponseDto.java)
-          - 📄 [PrivateChatDto.java](backend/src/main/java/meety/dtos/PrivateChatDto.java)
+          - 📄 [ChatMessageDto.java](backend/src/main/java/vaultWeb/dtos/ChatMessageDto.java)
+          - 📄 [GroupDto.java](backend/src/main/java/vaultWeb/dtos/GroupDto.java)
+          - 📄 [PollRequestDto.java](backend/src/main/java/vaultWeb/dtos/PollRequestDto.java)
+          - 📄 [PollResponseDto.java](backend/src/main/java/vaultWeb/dtos/PollResponseDto.java)
+          - 📄 [PrivateChatDto.java](backend/src/main/java/vaultWeb/dtos/PrivateChatDto.java)
           - 📁 **user**
-            - 📄 [UserDto.java](backend/src/main/java/meety/dtos/user/UserDto.java)
-            - 📄 [UserResponseDto.java](backend/src/main/java/meety/dtos/user/UserResponseDto.java)
+            - 📄 [UserDto.java](backend/src/main/java/vaultWeb/dtos/user/UserDto.java)
+            - 📄 [UserResponseDto.java](backend/src/main/java/vaultWeb/dtos/user/UserResponseDto.java)
         - 📁 **exceptions**
-          - 📄 [AdminAccessDeniedException.java](backend/src/main/java/meety/exceptions/AdminAccessDeniedException.java)
-          - 📄 [AlreadyMemberException.java](backend/src/main/java/meety/exceptions/AlreadyMemberException.java)
-          - 📄 [DuplicateUsernameException.java](backend/src/main/java/meety/exceptions/DuplicateUsernameException.java)
-          - 📄 [GlobalExceptionHandler.java](backend/src/main/java/meety/exceptions/GlobalExceptionHandler.java)
-          - 📄 [LastAdminException.java](backend/src/main/java/meety/exceptions/LastAdminException.java)
-          - 📄 [UnauthorizedException.java](backend/src/main/java/meety/exceptions/UnauthorizedException.java)
+          - 📄 [AdminAccessDeniedException.java](backend/src/main/java/vaultWeb/exceptions/AdminAccessDeniedException.java)
+          - 📄 [AlreadyMemberException.java](backend/src/main/java/vaultWeb/exceptions/AlreadyMemberException.java)
+          - 📄 [DuplicateUsernameException.java](backend/src/main/java/vaultWeb/exceptions/DuplicateUsernameException.java)
+          - 📄 [GlobalExceptionHandler.java](backend/src/main/java/vaultWeb/exceptions/GlobalExceptionHandler.java)
+          - 📄 [LastAdminException.java](backend/src/main/java/vaultWeb/exceptions/LastAdminException.java)
+          - 📄 [UnauthorizedException.java](backend/src/main/java/vaultWeb/exceptions/UnauthorizedException.java)
           - 📁 **notfound**
-            - 📄 [GroupNotFoundException.java](backend/src/main/java/meety/exceptions/notfound/GroupNotFoundException.java)
-            - 📄 [NotMemberException.java](backend/src/main/java/meety/exceptions/notfound/NotMemberException.java)
-            - 📄 [PollNotFoundException.java](backend/src/main/java/meety/exceptions/notfound/PollNotFoundException.java)
-            - 📄 [UserNotFoundException.java](backend/src/main/java/meety/exceptions/notfound/UserNotFoundException.java)
+            - 📄 [GroupNotFoundException.java](backend/src/main/java/vaultWeb/exceptions/notfound/GroupNotFoundException.java)
+            - 📄 [NotMemberException.java](backend/src/main/java/vaultWeb/exceptions/notfound/NotMemberException.java)
+            - 📄 [PollNotFoundException.java](backend/src/main/java/vaultWeb/exceptions/notfound/PollNotFoundException.java)
+            - 📄 [UserNotFoundException.java](backend/src/main/java/vaultWeb/exceptions/notfound/UserNotFoundException.java)
         - 📁 **models**
-          - 📄 [ChatMessage.java](backend/src/main/java/meety/models/ChatMessage.java)
-          - 📄 [Group.java](backend/src/main/java/meety/models/Group.java)
-          - 📄 [GroupMember.java](backend/src/main/java/meety/models/GroupMember.java)
-          - 📄 [Poll.java](backend/src/main/java/meety/models/Poll.java)
-          - 📄 [PollOption.java](backend/src/main/java/meety/models/PollOption.java)
-          - 📄 [PollVote.java](backend/src/main/java/meety/models/PollVote.java)
-          - 📄 [PrivateChat.java](backend/src/main/java/meety/models/PrivateChat.java)
-          - 📄 [User.java](backend/src/main/java/meety/models/User.java)
+          - 📄 [ChatMessage.java](backend/src/main/java/vaultWeb/models/ChatMessage.java)
+          - 📄 [Group.java](backend/src/main/java/vaultWeb/models/Group.java)
+          - 📄 [GroupMember.java](backend/src/main/java/vaultWeb/models/GroupMember.java)
+          - 📄 [Poll.java](backend/src/main/java/vaultWeb/models/Poll.java)
+          - 📄 [PollOption.java](backend/src/main/java/vaultWeb/models/PollOption.java)
+          - 📄 [PollVote.java](backend/src/main/java/vaultWeb/models/PollVote.java)
+          - 📄 [PrivateChat.java](backend/src/main/java/vaultWeb/models/PrivateChat.java)
+          - 📄 [User.java](backend/src/main/java/vaultWeb/models/User.java)
           - 📁 **enums**
-            - 📄 [Role.java](backend/src/main/java/meety/models/enums/Role.java)
+            - 📄 [Role.java](backend/src/main/java/vaultWeb/models/enums/Role.java)
         - 📁 **repositories**
-          - 📄 [ChatMessageRepository.java](backend/src/main/java/meety/repositories/ChatMessageRepository.java)
-          - 📄 [GroupMemberRepository.java](backend/src/main/java/meety/repositories/GroupMemberRepository.java)
-          - 📄 [GroupRepository.java](backend/src/main/java/meety/repositories/GroupRepository.java)
-          - 📄 [PollRepository.java](backend/src/main/java/meety/repositories/PollRepository.java)
-          - 📄 [PollVoteRepository.java](backend/src/main/java/meety/repositories/PollVoteRepository.java)
-          - 📄 [PrivateChatRepository.java](backend/src/main/java/meety/repositories/PrivateChatRepository.java)
-          - 📄 [UserRepository.java](backend/src/main/java/meety/repositories/UserRepository.java)
+          - 📄 [ChatMessageRepository.java](backend/src/main/java/vaultWeb/repositories/ChatMessageRepository.java)
+          - 📄 [GroupMemberRepository.java](backend/src/main/java/vaultWeb/repositories/GroupMemberRepository.java)
+          - 📄 [GroupRepository.java](backend/src/main/java/vaultWeb/repositories/GroupRepository.java)
+          - 📄 [PollRepository.java](backend/src/main/java/vaultWeb/repositories/PollRepository.java)
+          - 📄 [PollVoteRepository.java](backend/src/main/java/vaultWeb/repositories/PollVoteRepository.java)
+          - 📄 [PrivateChatRepository.java](backend/src/main/java/vaultWeb/repositories/PrivateChatRepository.java)
+          - 📄 [UserRepository.java](backend/src/main/java/vaultWeb/repositories/UserRepository.java)
         - 📁 **security**
-          - 📄 [EncryptionUtil.java](backend/src/main/java/meety/security/EncryptionUtil.java)
-          - 📄 [JwtAuthFilter.java](backend/src/main/java/meety/security/JwtAuthFilter.java)
-          - 📄 [JwtUtil.java](backend/src/main/java/meety/security/JwtUtil.java)
-          - 📄 [SecurityConfig.java](backend/src/main/java/meety/security/SecurityConfig.java)
+          - 📄 [EncryptionUtil.java](backend/src/main/java/vaultWeb/security/EncryptionUtil.java)
+          - 📄 [JwtAuthFilter.java](backend/src/main/java/vaultWeb/security/JwtAuthFilter.java)
+          - 📄 [JwtUtil.java](backend/src/main/java/vaultWeb/security/JwtUtil.java)
+          - 📄 [SecurityConfig.java](backend/src/main/java/vaultWeb/security/SecurityConfig.java)
           - 📁 **annotations**
-            - 📄 [AdminOnly.java](backend/src/main/java/meety/security/annotations/AdminOnly.java)
+            - 📄 [AdminOnly.java](backend/src/main/java/vaultWeb/security/annotations/AdminOnly.java)
           - 📁 **aspects**
-            - 📄 [AdminOnlyAspect.java](backend/src/main/java/meety/security/aspects/AdminOnlyAspect.java)
+            - 📄 [AdminOnlyAspect.java](backend/src/main/java/vaultWeb/security/aspects/AdminOnlyAspect.java)
         - 📁 **services**
-          - 📄 [ChatService.java](backend/src/main/java/meety/services/ChatService.java)
-          - 📄 [GroupService.java](backend/src/main/java/meety/services/GroupService.java)
-          - 📄 [PollService.java](backend/src/main/java/meety/services/PollService.java)
-          - 📄 [PrivateChatService.java](backend/src/main/java/meety/services/PrivateChatService.java)
-          - 📄 [UserService.java](backend/src/main/java/meety/services/UserService.java)
+          - 📄 [ChatService.java](backend/src/main/java/vaultWeb/services/ChatService.java)
+          - 📄 [GroupService.java](backend/src/main/java/vaultWeb/services/GroupService.java)
+          - 📄 [PollService.java](backend/src/main/java/vaultWeb/services/PollService.java)
+          - 📄 [PrivateChatService.java](backend/src/main/java/vaultWeb/services/PrivateChatService.java)
+          - 📄 [UserService.java](backend/src/main/java/vaultWeb/services/UserService.java)
           - 📁 **auth**
-            - 📄 [AuthService.java](backend/src/main/java/meety/services/auth/AuthService.java)
-            - 📄 [MyUserDetailsService.java](backend/src/main/java/meety/services/auth/MyUserDetailsService.java)
+            - 📄 [AuthService.java](backend/src/main/java/vaultWeb/services/auth/AuthService.java)
+            - 📄 [MyUserDetailsService.java](backend/src/main/java/vaultWeb/services/auth/MyUserDetailsService.java)
   - 📁 **test**
     - 📁 **java**
-      - 📁 **meety**
-        - 📄 [BackendApplicationTests.java](backend/src/test/java/meety/BackendApplicationTests.java)
+      - 📁 **vaultWeb**
+        - 📄 [BackendApplicationTests.java](backend/src/test/java/vaultWeb/BackendApplicationTests.java)
 
 ## frontend
 
