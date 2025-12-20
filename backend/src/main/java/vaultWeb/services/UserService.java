@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vaultWeb.exceptions.DuplicateUsernameException;
+import vaultWeb.exceptions.UnauthorizedException;
 import vaultWeb.models.User;
 import vaultWeb.repositories.UserRepository;
 
@@ -64,5 +65,26 @@ public class UserService {
    */
   public List<User> getAllUsers() {
     return userRepository.findAll();
+  }
+
+  /**
+   * Allows an authenticated user to change their password after validating the old password.
+   *
+   * @param user The authenticated {@link User} requesting the change.
+   * @param currentPassword The plaintext current password provided by the user.
+   * @param newPassword The new plaintext password to set.
+   * @throws UnauthorizedException if the user is null or the current password is invalid.
+   */
+  public void changePassword(User user, String currentPassword, String newPassword) {
+    if (user == null) {
+      throw new UnauthorizedException("No authenticated user found");
+    }
+
+    if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+      throw new UnauthorizedException("Current password is incorrect");
+    }
+
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
   }
 }

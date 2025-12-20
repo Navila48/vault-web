@@ -9,9 +9,9 @@
       <!-- Desktop Links and Theme Toggle -->
       <div class="hidden md:flex space-x-6 items-center">
         <a routerLink="/" class="navbar-link">Home</a>
+        <a routerLink="/dashboard" class="navbar-link">Dashboard</a>
         <a routerLink="/cloud" class="navbar-link">Cloud</a>
         <a routerLink="/passwords" class="navbar-link">Password Manager</a>
-        <a routerLink="/profile" class="navbar-link">Profile</a>
 
         <!-- Theme Toggle Button -->
         <button
@@ -53,6 +53,10 @@
           >
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
+        </button>
+
+        <button type="button" class="logout-btn" (click)="logout()">
+          Logout
         </button>
       </div>
 
@@ -126,6 +130,12 @@
       >Home</a
     >
     <a
+      routerLink="/dashboard"
+      (click)="closeMobileMenu()"
+      class="mobile-link block py-2"
+      >Dashboard</a
+    >
+    <a
       routerLink="/cloud"
       (click)="closeMobileMenu()"
       class="mobile-link block py-2"
@@ -137,11 +147,8 @@
       class="mobile-link block py-2"
       >Password Manager</a
     >
-    <a
-      routerLink="/profile"
-      (click)="closeMobileMenu()"
-      class="mobile-link block py-2"
-      >Profile</a
-    >
+    <button type="button" class="mobile-logout" (click)="logout()">
+      Logout
+    </button>
   </div>
 </nav>

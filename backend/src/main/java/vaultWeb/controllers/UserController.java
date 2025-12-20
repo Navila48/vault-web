@@ -11,8 +11,10 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vaultWeb.dtos.user.ChangePasswordRequest;
 import vaultWeb.dtos.user.UserDto;
 import vaultWeb.dtos.user.UserResponseDto;
+import vaultWeb.exceptions.UnauthorizedException;
 import vaultWeb.models.User;
 import vaultWeb.services.UserService;
 import vaultWeb.services.auth.AuthService;
@@ -148,5 +150,19 @@ public class UserController {
     List<UserResponseDto> users =
         userService.getAllUsers().stream().map(UserResponseDto::new).toList();
     return ResponseEntity.ok(users);
+  }
+
+  @PostMapping("/change-password")
+  @Operation(
+      summary = "Change password for the authenticated user",
+      description =
+          "User must provide the current password. The new password must meet the platform requirements.")
+  public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+    User currentUser = authService.getCurrentUser();
+    if (currentUser == null) {
+      throw new UnauthorizedException("User not authenticated");
+    }
+    userService.changePassword(currentUser, request.getCurrentPassword(), request.getNewPassword());
+    return ResponseEntity.noContent().build();
   }
 }

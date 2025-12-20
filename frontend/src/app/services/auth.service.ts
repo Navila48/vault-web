@@ -46,6 +46,14 @@ export class AuthService {
       {},
       { withCredentials: true },
     );
+  changePassword(
+    currentPassword: string,
+    newPassword: string,
+  ): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/auth/change-password`, {
+      currentPassword,
+      newPassword,
+    });
   }
 
   saveToken(token: string): void {

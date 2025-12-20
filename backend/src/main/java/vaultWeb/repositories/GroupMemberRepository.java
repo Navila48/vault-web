@@ -17,7 +17,11 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
 
   List<GroupMember> findAllByGroup(Group group);
 
+  List<GroupMember> findAllByUser(User user);
+
   void deleteByGroupAndUser(Group group, User userId);
 
   long countByGroupAndRole(Group group, Role role);
+
+  long countByGroup(Group group);
 }
