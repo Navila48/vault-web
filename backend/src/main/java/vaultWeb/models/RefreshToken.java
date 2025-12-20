@@ -13,7 +13,7 @@ public class RefreshToken {
   @Column(nullable = false, unique = true)
   private String tokenId; // jti
 
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   private User user;
 
   @Column(nullable = false)
@@ -24,5 +24,11 @@ public class RefreshToken {
 
   private boolean revoked;
 
-  private Instant createdAt = Instant.now();
+  @Column(nullable = false, updatable = false)
+  private Instant createdAt;
+
+  @PrePersist
+  protected void onCreate() {
+    this.createdAt = Instant.now();
+  }
 }

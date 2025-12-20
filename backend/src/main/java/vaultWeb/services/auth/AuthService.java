@@ -185,7 +185,7 @@ public class AuthService {
         refreshTokenRepository.findByTokenIdAndRevokedFalse(tokenId).orElse(null);
     String incomingHash = TokenHashUtil.sha256(rawRefreshToken);
     if (storedToken == null
-        || !incomingHash.equals(storedToken.getTokenHash())
+        || !TokenHashUtil.constantTimeEquals(incomingHash, storedToken.getTokenHash())
         || storedToken.getExpiresAt().isBefore(Instant.now())) {
 
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

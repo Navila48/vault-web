@@ -50,14 +50,14 @@ public class JwtUtil {
   /** Secret key used for signing the JWT. Generated using HS256 (HMAC with SHA-256) algorithm. */
   private final SecretKey SECRET_KEY;
 
-  private final SecretKey RefreshKEY;
+  private final SecretKey REFRESH_KEY;
 
   private final long EXPIRATION_TIME = 1000 * 60 * 15;
 
   public JwtUtil(
       @Value("${jwt.secret}") String secret, @Value("${jwt.refreshSecret}") String refreshSecret) {
     this.SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes());
-    this.RefreshKEY = Keys.hmacShaKeyFor(refreshSecret.getBytes());
+    this.REFRESH_KEY = Keys.hmacShaKeyFor(refreshSecret.getBytes());
   }
 
   /**
@@ -136,7 +136,7 @@ public class JwtUtil {
         .setId(tokenId) // jti
         .setIssuedAt(Date.from(now))
         .setExpiration(Date.from(expiry))
-        .signWith(RefreshKEY, SignatureAlgorithm.HS256)
+        .signWith(REFRESH_KEY, SignatureAlgorithm.HS256)
         .compact();
   }
 
@@ -151,7 +151,7 @@ public class JwtUtil {
    * @throws JwtException if the token is invalid or expired
    */
   public Claims parseRefreshToken(String token) {
-    return Jwts.parserBuilder().setSigningKey(RefreshKEY).build().parseClaimsJws(token).getBody();
+    return Jwts.parserBuilder().setSigningKey(REFRESH_KEY).build().parseClaimsJws(token).getBody();
   }
 
   /**
