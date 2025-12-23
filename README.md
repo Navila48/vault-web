@@ -96,7 +96,7 @@ On some systems, the JVM may default to deprecated timezone identifiers (for exa
 
 If the backend fails to start with an error similar to:
 
-```
+```bash
 FATAL: invalid value for parameter "TimeZone"
 ```
 
