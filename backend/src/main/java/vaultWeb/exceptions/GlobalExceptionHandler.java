@@ -111,6 +111,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(RateLimitExceededException.class)
   public ResponseEntity<String> handleRateLimitExceededException(RateLimitExceededException ex) {
     return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+        .header("Retry-After", String.valueOf(ex.getRetryAfterSeconds()))
         .body("Too Many Requests: " + ex.getMessage());
   }
 

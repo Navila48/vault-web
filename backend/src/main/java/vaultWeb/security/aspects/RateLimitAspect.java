@@ -1,32 +1,35 @@
 package vaultWeb.security.aspects;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import vaultWeb.exceptions.RateLimitExceededException;
+import vaultWeb.security.JwtUtil;
 import vaultWeb.security.annotations.ApiRateLimit;
 
 @Aspect
 @Component
 public class RateLimitAspect {
 
-  private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+  // Caffeine Cache with eviction
+  private final Cache<String, Bucket> cache =
+      Caffeine.newBuilder()
+          .expireAfterAccess(Duration.ofMinutes(5)) // remove idle buckets
+          .maximumSize(10_000) // safety cap
+          .build();
 
-  @Value("${jwt.secret}")
-  private String jwtSecret;
+  @Autowired private JwtUtil jwtUtil;
 
   @Around("@annotation(apiRateLimit)")
   public Object rateLimit(ProceedingJoinPoint joinPoint, ApiRateLimit apiRateLimit)
@@ -51,7 +54,7 @@ public class RateLimitAspect {
   }
 
   private Bucket resolveBucket(String key, ApiRateLimit rateLimit) {
-    return cache.computeIfAbsent(
+    return cache.get(
         key,
         k -> {
           Bandwidth limit =
@@ -68,6 +71,7 @@ public class RateLimitAspect {
 
   private String getRateLimitKey(
       ProceedingJoinPoint joinPoint, HttpServletRequest request, ApiRateLimit rateLimit) {
+
     String methodName = joinPoint.getSignature().toShortString();
 
     if (rateLimit.useIpAddress()) {
@@ -95,15 +99,7 @@ public class RateLimitAspect {
       }
 
       String token = authHeader.substring(7);
-
-      Claims claims =
-          Jwts.parserBuilder()
-              .setSigningKey(jwtSecret.getBytes())
-              .build()
-              .parseClaimsJws(token)
-              .getBody();
-
-      return claims.getSubject();
+      return jwtUtil.extractUsername(token);
 
     } catch (Exception e) {
       return null;
