@@ -42,7 +42,6 @@ public class UserController {
       @ApiResponse(responseCode = "401", description = "Password does not meet requirements. It must contain at least one uppercase letter and one digit."),
       @ApiResponse(responseCode = "409", description = "Username already exists.")
   })
-
   public ResponseEntity<String> register(@Valid @RequestBody UserDto user) {
     userService.registerUser(new User(user));
     return ResponseEntity.ok("User registered successfully");
@@ -153,12 +152,15 @@ public class UserController {
   @ApiRateLimit(capacity = 5, refillTokens = 5, refillDurationMinutes = 1, useIpAddress = true)
   @PostMapping("/change-password")
   @Operation(summary = "Change password for the authenticated user", description = "User must provide the current password. The new password must meet the platform requirements.")
+  @ApiResponses({ @ApiResponse(responseCode = "200", description = "Password changed successfully."),
+      @ApiResponse(responseCode = "401", description = "Unauthorized request. You must provide an authentication token along with the correct current password.")
+  })
   public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
     User currentUser = authService.getCurrentUser();
     if (currentUser == null) {
       throw new UnauthorizedException("User not authenticated");
     }
     userService.changePassword(currentUser, request.getCurrentPassword(), request.getNewPassword());
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok().build();
   }
 }
