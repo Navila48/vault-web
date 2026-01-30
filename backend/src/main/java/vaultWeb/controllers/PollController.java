@@ -51,10 +51,11 @@ public class PollController {
   public ResponseEntity<PollResponseDto> createPoll(
       @PathVariable Long groupId, @RequestBody @Valid PollRequestDto pollDto) {
     User currentUser = authService.getCurrentUser();
-    Group group = groupService
-        .getGroupById(groupId)
-        .orElseThrow(
-            () -> new GroupNotFoundException("Group with id " + groupId + " not found"));
+    Group group =
+        groupService
+            .getGroupById(groupId)
+            .orElseThrow(
+                () -> new GroupNotFoundException("Group with id " + groupId + " not found"));
     Poll poll = pollService.createPoll(group, currentUser, pollDto);
 
     // Convert to response DTO and return

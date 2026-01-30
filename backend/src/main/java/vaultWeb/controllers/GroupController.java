@@ -17,10 +17,8 @@ import vaultWeb.services.auth.AuthService;
 /**
  * Controller for managing groups within the application.
  *
- * <p>Provides endpoints to list public groups, get details of a group, manage
- * group membership, and
- * create, update, or delete groups. Some operations require the user to have
- * admin privileges.
+ * <p>Provides endpoints to list public groups, get details of a group, manage group membership, and
+ * create, update, or delete groups. Some operations require the user to have admin privileges.
  */
 @RestController
 @RequestMapping("/api/groups")
