@@ -157,6 +157,69 @@ class UserControllerIntegrationTest extends IntegrationTestBase {
   }
 
   // ============================================================================
+  // Input Validation (verifies @Valid wiring returns 400 for invalid input)
+  // ============================================================================
+
+  @Nested
+  class InputValidation {
+
+    @ParameterizedTest(name = "username: \"{0}\"")
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void shouldRejectRegistration_WithInvalidUsername(String username) throws Exception {
+      UserDto testUser = createUserDto(username, TEST_PASSWORD);
+
+      mockMvc
+          .perform(
+              post("/api/auth/register")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(testUser)))
+          .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest(name = "password: \"{0}\"")
+    @NullAndEmptySource
+    @ValueSource(strings = {"Short1!", "nouppercase1!", "NoDigit!", "NoSpecial1"})
+    void shouldRejectRegistration_WithInvalidPassword(String password) throws Exception {
+      UserDto testUser = createUserDto(TEST_USERNAME, password);
+
+      mockMvc
+          .perform(
+              post("/api/auth/register")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(testUser)))
+          .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest(name = "username: \"{0}\"")
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void shouldRejectLogin_WithInvalidUsername(String username) throws Exception {
+      UserDto testUser = createUserDto(username, TEST_PASSWORD);
+
+      mockMvc
+          .perform(
+              post("/api/auth/login")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(testUser)))
+          .andExpect(status().isBadRequest());
+    }
+
+    @ParameterizedTest(name = "password: \"{0}\"")
+    @NullAndEmptySource
+    void shouldRejectLogin_WithInvalidPassword(String password) throws Exception {
+      UserDto testUser = createUserDto(TEST_USERNAME, password);
+
+      mockMvc
+          .perform(
+              post("/api/auth/login")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsString(testUser)))
+          .andExpect(status().isBadRequest());
+    }
+  }
+
+  // ============================================================================
   // Registration
   // ============================================================================
 
