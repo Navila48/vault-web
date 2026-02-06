@@ -16,6 +16,8 @@ import vaultWeb.dtos.user.UserResponseDto;
 import vaultWeb.exceptions.UnauthorizedException;
 import vaultWeb.models.User;
 import vaultWeb.security.annotations.ApiRateLimit;
+import vaultWeb.security.annotations.AuditSecurityEvent;
+import vaultWeb.security.annotations.SecurityEventType;
 import vaultWeb.services.UserService;
 import vaultWeb.services.auth.AuthService;
 import vaultWeb.services.auth.LoginResult;
@@ -39,6 +41,7 @@ public class UserController {
                             Accepts a JSON object containing username and plaintext password.
                             The password is hashed using BCrypt (via Spring Security's PasswordEncoder) before being persisted.
                             The new user is assigned the default role 'User'.""")
+  @AuditSecurityEvent(SecurityEventType.REGISTER)
   @ApiRateLimit(capacity = 5, refillTokens = 5, refillDurationMinutes = 1, useIpAddress = true)
   @ApiResponse(responseCode = "200", description = "User registered successfully")
   @ApiResponse(
@@ -69,6 +72,7 @@ public class UserController {
 
                     The access token should be sent in the Authorization header for protected endpoints.
                     """)
+  @AuditSecurityEvent(SecurityEventType.LOGIN)
   @ApiRateLimit(capacity = 5, refillTokens = 5, refillDurationMinutes = 1, useIpAddress = true)
   @PostMapping("/login")
   @ApiResponse(responseCode = "200", description = "Login successful.")
@@ -102,6 +106,7 @@ public class UserController {
                     """)
   @ApiResponse(responseCode = "200", description = "Access token refreshed successfully")
   @ApiResponse(responseCode = "401", description = "Invalid, expired, or revoked refresh token")
+  @AuditSecurityEvent(SecurityEventType.TOKEN_REFRESH)
   @ApiRateLimit(capacity = 5, refillTokens = 5, refillDurationMinutes = 1, useIpAddress = true)
   @PostMapping("/refresh")
   public ResponseEntity<?> refresh(
@@ -114,6 +119,7 @@ public class UserController {
     return authService.refresh(refreshToken, response);
   }
 
+  @AuditSecurityEvent(SecurityEventType.LOGOUT)
   @PostMapping("/logout")
   @Operation(
       summary = "Logout user and revoke refresh token",
@@ -166,6 +172,7 @@ public class UserController {
     return ResponseEntity.ok(users);
   }
 
+  @AuditSecurityEvent(SecurityEventType.PASSWORD_CHANGE)
   @ApiRateLimit(capacity = 5, refillTokens = 5, refillDurationMinutes = 1, useIpAddress = true)
   @PostMapping("/change-password")
   @Operation(
