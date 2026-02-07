@@ -25,6 +25,12 @@
     >
       Clear Selected ({{ selectedChatIds.size }})
     </button>
+    <button
+      (click)="openCreateGroupDialog()"
+      class="flex-1 px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors"
+    >
+      Create Group ({{ selectedChatIds.size }})
+    </button>
   </div>
 
   <div *ngIf="isLoading" class="text-center text-gray-400 py-4">
@@ -97,6 +103,7 @@
 <div
   *ngIf="showClearConfirmDialog"
   class=" fixed inset-0 bg-opacity-50 flex items-center justify-center z-50"
+  (click)="cancelDialog()"
 >
   <div
     class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6"
@@ -123,6 +130,66 @@
       >
         {{ isProcessing ? 'Clearing...' : 'Clear' }}
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Group Dialog -->
+<div>
+  <div
+    *ngIf="showGroupDialog"
+    class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50"
+    (click)="cancelDialog()"
+  >
+    <div
+      class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Create Group</h3>
+      <p class="text-gray-600 mb-4">
+        Creating a group from {{ selectedChatIds.size }} chat(s)
+      </p>
+
+      <div>
+        <label for="groupName" class="block text-sm font-medium text-gray-700"> Group Name </label>
+        <input
+          id="groupName"
+          [(ngModel)]="newGroupName"
+          type="text"
+          [disabled]="isProcessing"
+          placeholder="Enter group name"
+          class="px-3 py-3 w-full border border-gray-300 rounded-md focus:outline-none"
+        >
+      </div>
+
+      <div>
+        <label for="groupDescription" class="block text-sm font-medium text-gray-700"> Group Description </label>
+        <input
+          id="groupDescription"
+          [(ngModel)]="groupDescription"
+          type="text"
+          [disabled]="isProcessing"
+          placeholder="Enter group description"
+          class="px-3 py-3 w-full border border-gray-300 rounded-md focus:outline-none"
+        >
+      </div>
+
+      <div class="flex gap-3 py-2 justify-end">
+        <button
+          (click)="cancelDialog()"
+          [disabled]="isProcessing"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="confirmCreateGroup()"
+          [disabled]="!newGroupName.trim() || isProcessing"
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors disabled:opacity-50"
+        >
+          {{ isProcessing ? 'Creating...' : 'Create' }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

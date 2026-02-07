@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { UserDto } from '../../models/dtos/UserDto';
-import { CommonModule } from '@angular/common';
-import { PrivateChatDialogComponent } from '../private-chat-dialog/private-chat-dialog.component';
-import { PrivateChatService } from '../../services/private-chat.service';
-import { PrivateChatDto } from '../../models/dtos/PrivateChatDto';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../services/user.service';
+import {UserDto} from '../../models/dtos/UserDto';
+import {CommonModule} from '@angular/common';
+import {PrivateChatDialogComponent} from '../private-chat-dialog/private-chat-dialog.component';
+import {PrivateChatService} from '../../services/private-chat.service';
+import {PrivateChatDto} from '../../models/dtos/PrivateChatDto';
+import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PrivateChatDialogComponent],
+  imports: [CommonModule, PrivateChatDialogComponent, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -28,13 +29,17 @@ export class HomeComponent implements OnInit {
   selectedChatIds: Set<number> = new Set();
   showClearConfirmDialog = false;
   isProcessing = false;
+  showGroupDialog: boolean = false;
+  newGroupName = '';
+  groupDescription = '';
 
   constructor(
     private userService: UserService,
     private privateChatService: PrivateChatService,
     private authService: AuthService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.currentUsername = this.authService.getUsername();
@@ -45,18 +50,18 @@ export class HomeComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-/*
-    this.userService.getAllUsers().subscribe({
-      next: (data) => {
-        this.users = data;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.error = 'Failed to load users.';
-        this.isLoading = false;
-      },
-    });
- */
+    /*
+        this.userService.getAllUsers().subscribe({
+          next: (data) => {
+            this.users = data;
+            this.isLoading = false;
+          },
+          error: () => {
+            this.error = 'Failed to load users.';
+            this.isLoading = false;
+          },
+        });
+     */
 
     this.loadData();
   }
@@ -67,12 +72,12 @@ export class HomeComponent implements OnInit {
     Promise.all([
       this.userService.getAllUsers().toPromise(),
       this.privateChatService.getUserPrivateChats().toPromise()
-    ]).then(([users,chats]) => {
-      this.users = users || [];
-      this.privateChats = chats || [];
-      this.isLoading = false;
+    ]).then(([users, chats]) => {
+        this.users = users || [];
+        this.privateChats = chats || [];
+        this.isLoading = false;
       }
-    ).catch(()=>{
+    ).catch(() => {
       this.error = 'Failed to Load data.';
       this.isLoading = false;
     })
@@ -102,13 +107,13 @@ export class HomeComponent implements OnInit {
 
   toggleEditMode() {
     this.isEditMode = !this.isEditMode;
-    if(!this.isEditMode) {
+    if (!this.isEditMode) {
       this.selectedChatIds.clear();
     }
   }
 
   toggleChatSelection(chatId: number) {
-    if(this.selectedChatIds.has(chatId)) {
+    if (this.selectedChatIds.has(chatId)) {
       this.selectedChatIds.delete(chatId);
     } else {
       this.selectedChatIds.add(chatId);
@@ -118,12 +123,14 @@ export class HomeComponent implements OnInit {
   isChatSelected(chatId: number): boolean {
     return this.selectedChatIds.has(chatId);
   }
-  hasSelectedChats(){
+
+  hasSelectedChats() {
     console.log("Selected items size " + this.selectedChatIds.size);
     return this.selectedChatIds.size > 0;
   }
+
   openPrivateChat(chat: PrivateChatDto) {
-    if(this.isEditMode) return ; //Don't open chat in edit mode
+    if (this.isEditMode) return; //Don't open chat in edit mode
     if (!this.currentUsername) return;
 
     //get other user info
@@ -145,13 +152,16 @@ export class HomeComponent implements OnInit {
   }
 
   openClearConfirmDialog() {
-    if(this.hasSelectedChats()){
+    if (this.hasSelectedChats()) {
       this.showClearConfirmDialog = true;
     }
   }
 
   cancelDialog() {
     this.showClearConfirmDialog = false;
+    this.showGroupDialog = false;
+    this.newGroupName = '';
+    this.groupDescription = '';
   }
 
   confirmClearChats() {
@@ -167,7 +177,7 @@ export class HomeComponent implements OnInit {
           //Reload data to reflect changes
           this.loadData();
         },
-        error: (err) =>{
+        error: (err) => {
           console.error('Failed to clear chats ', err);
           this.error = 'Failed to clear chats. Please try again.';
           this.isProcessing = false;
@@ -176,4 +186,35 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  openCreateGroupDialog() {
+    if (this.hasSelectedChats()) {
+      this.showGroupDialog = true;
+      this.newGroupName = ''
+    }
+  }
+
+  confirmCreateGroup() {
+    if (!this.newGroupName.trim()) {
+      return;
+    }
+    this.isProcessing = true;
+    const chatIds = Array.from(this.selectedChatIds);
+    this.privateChatService.createGroupFromChats(chatIds, this.newGroupName, this.groupDescription)
+      .subscribe({
+        next: (respose => {
+          console.log("Group created: ", respose.groupId);
+          this.showGroupDialog = false;
+          this.isProcessing = false;
+          this.isEditMode = false;
+          this.newGroupName = '';
+          this.groupDescription = '';
+          this.selectedChatIds.clear();
+          this.loadData();
+        }),
+        error: (err => {
+          this.error = "Failed to create group. Please Try again."
+          this.isProcessing = false;
+        })
+      })
+  }
 }

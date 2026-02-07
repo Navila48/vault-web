@@ -6,11 +6,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import vaultWeb.dtos.BatchOperationDto;
 import vaultWeb.dtos.ChatMessageDto;
+import vaultWeb.dtos.CreateGroupFromChatsRequest;
 import vaultWeb.dtos.PrivateChatDto;
 import vaultWeb.exceptions.DecryptionFailedException;
 import vaultWeb.models.ChatMessage;
@@ -127,6 +130,20 @@ public class PrivateChatController {
             .success(true)
             .message("Successfully cleared multiple chats.")
             .affectedCount(deleteCount)
+            .build();
+  }
+
+  @PostMapping("/create-group-from-chats")
+  @Operation(
+          summary = "Create a group from multiple private chats",
+          description = "Combines all participants from selected private chats into a new group")
+  public BatchOperationDto createGroupFromChats(@Valid @RequestBody CreateGroupFromChatsRequest groupCreationRequest, Authentication authentication){
+    String currentUsername = authentication.getName();
+    Long groupId = privateChatService.createGroupFromChats(groupCreationRequest.getPrivateChatIds(),groupCreationRequest.getGroupName(),groupCreationRequest.getDescription(),currentUsername);
+    return BatchOperationDto.builder()
+            .success(true)
+            .message("Successfully created group from chats.")
+            .groupId(groupId)
             .build();
   }
 }
