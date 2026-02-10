@@ -87,7 +87,7 @@ class SecurityAuditIntegrationTest extends IntegrationTestBase {
   }
 
   @Test
-  void logout_shouldLogSecurityEventWithUsernameFromJwt() throws Exception {
+  void logout_shouldLogSecurityEventWithUsernameFromRefreshToken() throws Exception {
     // Arrange - register and login to get a valid session
     UserDto userDto = createUserDto("logoutuser", "Password1!");
     registerUser(userDto);
@@ -105,11 +105,18 @@ class SecurityAuditIntegrationTest extends IntegrationTestBase {
     var refreshTokenCookie = loginResult.getResponse().getCookie("refresh_token");
     listAppender.list.clear();
 
-    // Act - logout (authenticated endpoint)
+    // Act - logout with refresh token cookie
     mockMvc.perform(post("/api/auth/logout").cookie(refreshTokenCookie)).andExpect(status().isOk());
 
-    // Assert - should log LOGOUT event (username extracted from cookie/context)
-    assertSecurityEventLogged("LOGOUT", null, "SUCCESS");
+    // Assert - should log LOGOUT event with username extracted from refresh token cookie
+    assertSecurityEventLogged("LOGOUT", "logoutuser", "SUCCESS");
+  }
+
+  @Test
+  void refresh_withoutCookie_shouldLogFailure() throws Exception {
+    mockMvc.perform(post("/api/auth/refresh")).andExpect(status().isUnauthorized());
+
+    assertSecurityEventLogged("TOKEN_REFRESH", null, "FAILURE");
   }
 
   private UserDto createUserDto(String username, String password) {

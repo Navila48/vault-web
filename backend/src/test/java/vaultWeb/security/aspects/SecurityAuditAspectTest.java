@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import vaultWeb.dtos.user.UserDto;
@@ -66,7 +67,7 @@ class SecurityAuditAspectTest {
     when(joinPoint.getArgs()).thenReturn(new Object[] {});
 
     // Act
-    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent);
+    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent, ResponseEntity.ok().build());
 
     // Assert
     assertThat(listAppender.list).hasSize(1);
@@ -92,7 +93,7 @@ class SecurityAuditAspectTest {
     when(joinPoint.getArgs()).thenReturn(new Object[] {userDto});
 
     // Act
-    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent);
+    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent, ResponseEntity.ok().build());
 
     // Assert
     assertThat(listAppender.list).hasSize(1);
@@ -102,21 +103,20 @@ class SecurityAuditAspectTest {
   }
 
   @Test
-  void logSuccess_withXForwardedForHeader_usesForwardedIp() {
-    // Arrange
+  void logSuccess_withXForwardedForHeader_usesRemoteAddrNotForwardedIp() {
+    // Arrange - aspect intentionally ignores X-Forwarded-For to avoid trusting spoofed headers
     when(auditSecurityEvent.value()).thenReturn(SecurityEventType.REGISTER);
-    when(request.getHeader("X-Forwarded-For")).thenReturn("203.0.113.50, 70.41.3.18");
     when(request.getRemoteAddr()).thenReturn("127.0.0.1");
     when(jwtUtil.extractUsernameFromRequest(request)).thenReturn(null);
     when(joinPoint.getArgs()).thenReturn(new Object[] {});
 
     // Act
-    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent);
+    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent, ResponseEntity.ok().build());
 
-    // Assert
+    // Assert - should use remoteAddr, not X-Forwarded-For
     assertThat(listAppender.list).hasSize(1);
     ILoggingEvent logEvent = listAppender.list.get(0);
-    assertThat(logEvent.getFormattedMessage()).contains("ip=203.0.113.50");
+    assertThat(logEvent.getFormattedMessage()).contains("ip=127.0.0.1");
   }
 
   @Test
@@ -155,7 +155,7 @@ class SecurityAuditAspectTest {
     when(joinPoint.getArgs()).thenReturn(new Object[] {"some-token"});
 
     // Act
-    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent);
+    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent, ResponseEntity.ok().build());
 
     // Assert
     assertThat(listAppender.list).hasSize(1);
@@ -172,7 +172,7 @@ class SecurityAuditAspectTest {
     when(joinPoint.getArgs()).thenReturn(new Object[] {});
 
     // Act
-    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent);
+    securityAuditAspect.logSuccess(joinPoint, auditSecurityEvent, ResponseEntity.ok().build());
 
     // Assert
     assertThat(listAppender.list).hasSize(1);
