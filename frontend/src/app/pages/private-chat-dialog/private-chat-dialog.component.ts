@@ -35,9 +35,12 @@ export class PrivateChatDialogComponent
   newMessage = '';
 
   @ViewChild('messageContainer') messageContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   private privateMessageSub!: Subscription;
 
   private shouldScroll = false;
+  isSearchOpen = false;
+  searchQuery = '';
 
   constructor(
     private wsService: WebSocketService,
@@ -102,5 +105,28 @@ export class PrivateChatDialogComponent
 
   onClose(): void {
     this.closeChat.emit();
+  }
+
+  toggleSearch() {
+    this.isSearchOpen = !this.isSearchOpen;
+    if (this.isSearchOpen) {
+      setTimeout(() => this.searchInput?.nativeElement.focus(), 0);
+    } else {
+      this.searchQuery = '';
+    }
+  }
+
+  get filteredMessages(): ChatMessageDto[] {
+    const query = this.searchQuery.trim();
+    if (!query) return this.messages;
+
+    try {
+      const regex = new RegExp(query, 'i');
+      return this.messages.filter((msg) => regex.test(msg.content));
+    } catch {
+      return this.messages.filter((msg) =>
+        msg.content.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
   }
 }
